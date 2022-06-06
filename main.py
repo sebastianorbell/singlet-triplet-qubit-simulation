@@ -108,7 +108,6 @@ def plot_evolve_state(hamiltonian_callable, times, control, initial_state):
     plt.plot(times, np.abs(np.squeeze(ys)))
     plt.show()
 
-    return result
 
 def rotation(phi):
 
