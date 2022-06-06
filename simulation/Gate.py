@@ -1,7 +1,7 @@
 import numpy as np
 from dataclasses import dataclass
 from typing import Union, List
-import torch
+# import torch
 
 class Gate:
 

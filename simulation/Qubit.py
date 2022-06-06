@@ -12,7 +12,8 @@ class Qubit:
         y = jax.vmap(self.map_matrix_evolve, in_axes=(0, 0, 0, None))(times, control, initial_state, f)
         return y
 
-    def map_matrix_evolve(self, times, control, initial_state, f):
+    @classmethod
+    def map_matrix_evolve(cls, times, control, initial_state, f):
         assert times.shape[0] == control.shape[0], f't shape {times.shape}, eps shape {control.shape}'
         control = diffrax.LinearInterpolation(times, control)
         H = lambda t: f(np.array([control.evaluate(t)]))
@@ -32,13 +33,15 @@ class Qubit:
         y = np.swapaxes(to_complex(solution.ys), 0, 1)
         return set_phase(y)
 
-    def evolve(self, times, control, initial_state, f):
+    @classmethod
+    def evolve(cls, times, control, initial_state, f):
 
-        H = lambda t: f()
-        func = lambda t, y: -1j * H(t) @ y
+        # H = lambda t: f()
+        func = lambda t, y: -1j * f() @ y
 
         result = solve_ivp(fun=func, y0=initial_state, t_span=(times[0], times[-1]), t_eval=times)
         y = np.swapaxes(result.y, 0, 1)
         return set_phase(y[:, :, np.newaxis])
 
-
+    # @classmethod
+    # def proper_evolve(cls, hamiltonian, times, initial_state):
