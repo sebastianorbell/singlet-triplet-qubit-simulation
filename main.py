@@ -127,7 +127,7 @@ _eps = 1e-3
 reduced_initial_state = np.array([1+0j, 0+0j]) * 1e-3
 callable_hamiltonian = lambda :  np.array(reduced_hamiltonian(_eps, tc, mu_b, delta_g, b_field))
 rot = lambda t: rotation(t)
-result = plot_evolve_state(callable_hamiltonian, times, control, reduced_initial_state)
+plot_evolve_state(callable_hamiltonian, times, control, reduced_initial_state)
 
 
 # x = 1e-3
