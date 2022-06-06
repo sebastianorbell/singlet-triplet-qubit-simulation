@@ -95,7 +95,7 @@ initial_state = np.array(
     ]
 )
 
-times = np.linspace(0, 100000000   , 1000000)
+times = np.linspace(0, 100000000, 1000000)
 control = np.full_like(times, 1e-3)
 
 # y = qubit.map_matrix_evolve(times, control, to_real(initial_state), hamiltonian)
@@ -123,9 +123,8 @@ def rotation(phi):
     ])
 
 _eps = 1e-3
-reduced_initial_state = np.array([1+0j, 0+0j]) * 1e-3
+reduced_initial_state = np.array([1+0j, 0+0j])
 callable_hamiltonian = lambda :  np.array(reduced_hamiltonian(_eps, tc, mu_b, delta_g, b_field))
-rot = lambda t: rotation(t)
 plot_evolve_state(callable_hamiltonian, times, control, reduced_initial_state)
 
 
