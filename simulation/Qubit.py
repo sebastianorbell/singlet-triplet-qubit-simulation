@@ -15,7 +15,7 @@ class Qubit:
     def map_matrix_evolve(self, times, control, initial_state, f):
         assert times.shape[0] == control.shape[0], f't shape {times.shape}, eps shape {control.shape}'
         control = diffrax.LinearInterpolation(times, control)
-        H = lambda t: f(np.array([control.evaluate(t)]))
+        H = lambda t: f(np.squeeze(np.array([control.evaluate(t)])))
         func = lambda t, y, args: to_real(-1j * H(t) @ to_complex(y))
 
         solution = diffrax.diffeqsolve(
@@ -25,14 +25,14 @@ class Qubit:
             t1=times[-1],
             dt0=(times[1] - times[0]),
             y0=initial_state,
-            # stepsize_controller=diffrax.PIDController(rtol=1e-3, atol=1e-6),
-            saveat=diffrax.SaveAt(ts=times)
+            stepsize_controller=diffrax.PIDController(rtol=1e-3, atol=1e-6),
+            saveat=diffrax.SaveAt(ts=times),
         )
 
         y = np.swapaxes(to_complex(solution.ys), 0, 1)
         return set_phase(y)
 
-    def evolve(self, times, control, initial_state, f):
+    def evolve(self, times, initial_state, f):
 
         H = lambda t: f()
         func = lambda t, y: -1j * H(t) @ y
